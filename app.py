@@ -39,68 +39,35 @@ conn.commit()
 # DARK MODE TOGGLE
 # -------------------------------------------------
 
-# Theme toggle
-theme = st.sidebar.radio(
-    "Theme",
-    ["Light Mode", "Dark Mode"]
-)
+theme = st.sidebar.radio("Theme", ["Light Mode", "Dark Mode"])
 
 if theme == "Dark Mode":
 
     st.markdown("""
     <style>
-
-    /* Whole App Background */
     .stApp {
         background-color: #0E1117;
         color: white;
     }
 
-    /* Text */
-    h1, h2, h3, h4, h5, h6, p, label, span {
-        color: white !important;
+    h1,h2,h3,h4,h5,h6,p,label,span {
+        color:white !important;
     }
 
-    /* Sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #111827;
+        background-color:#111827;
     }
 
-    /* Metric Cards */
-    div[data-testid="stMetric"] {
-        background-color: #1f2937;
-        padding: 15px;
-        border-radius: 10px;
+    div[data-testid="stMetric"]{
+        background-color:#1f2937;
+        padding:15px;
+        border-radius:10px;
     }
 
-    /* Dataframe */
-    .stDataFrame {
-        background-color: #1f2937;
+    .stButton>button{
+        background-color:#22c55e;
+        color:white;
     }
-
-    /* Buttons */
-    .stButton>button {
-        background-color: #22c55e;
-        color: white;
-    }
-
-    </style>
-    """, unsafe_allow_html=True)
-
-else:
-
-    st.markdown("""
-    <style>
-
-    .stApp {
-        background-color: #f5f7fb;
-        color: black;
-    }
-
-    h1, h2, h3, h4, h5, h6, p, label, span {
-        color: black !important;
-    }
-
     </style>
     """, unsafe_allow_html=True)
 
@@ -129,7 +96,7 @@ if menu == "Add Expense":
 
     category = col2.selectbox(
         "Category",
-        ["Food","Travel","Shopping","Bills","Other"]
+        ["🍔 Food","🚗 Travel","🛍 Shopping","💡 Bills","📦 Other"]
     )
 
     amount = col3.number_input("Amount",min_value=0)
@@ -210,16 +177,42 @@ elif menu == "Dashboard":
 
         # DOWNLOAD EXCEL
         excel_buffer = BytesIO()
-        df.to_excel(excel_buffer, index=False, engine="openpyxl")
-        
+
+        df.to_excel(excel_buffer,index=False,engine="openpyxl")
+
         excel_data = excel_buffer.getvalue()
-        
+
         st.download_button(
             label="Download Excel",
             data=excel_data,
             file_name="expense_report.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
+        )
+
+        # -------------------------------------------------
+        # MONTHLY BUDGET TRACKER
+        # -------------------------------------------------
+
+        st.divider()
+
+        st.subheader("💼 Monthly Budget Tracker")
+
+        budget = st.number_input(
+            "Enter Monthly Budget",
+            min_value=0,
+            value=10000
+        )
+
+        spent = df["amount"].sum()
+
+        remaining = budget - spent
+
+        st.metric("Budget Remaining",f"₹{remaining}")
+
+        if spent > budget:
+            st.error("⚠ You exceeded your monthly budget!")
+        else:
+            st.success("✔ You are within your budget.")
 
 # =================================================
 # ANALYTICS
@@ -239,7 +232,7 @@ elif menu == "Analytics":
 
         df["date"] = pd.to_datetime(df["date"])
 
-        category_data = df.groupby("category")["amount"].sum()
+        category_data = df.groupby("category")["amount"].sum().reset_index()
 
         col1,col2 = st.columns(2)
 
@@ -247,9 +240,11 @@ elif menu == "Analytics":
         with col1:
 
             fig = px.pie(
-                values=category_data.values,
-                names=category_data.index,
-                title="Category Distribution"
+                category_data,
+                values="amount",
+                names="category",
+                title="Expense Distribution",
+                hole=0.4
             )
 
             st.plotly_chart(fig,use_container_width=True)
@@ -258,16 +253,18 @@ elif menu == "Analytics":
         with col2:
 
             fig2 = px.bar(
-                x=category_data.index,
-                y=category_data.values,
-                labels={"x":"Category","y":"Amount"},
-                title="Category Comparison"
+                category_data,
+                x="category",
+                y="amount",
+                title="Category Spending",
+                color="category"
             )
 
             st.plotly_chart(fig2,use_container_width=True)
 
         # MONTHLY REPORT
-        df["month"] = df["date"].dt.to_period("M").astype(str)
+
+        df["month"] = df["date"].dt.strftime("%b %Y")
 
         monthly_data = df.groupby("month")["amount"].sum().reset_index()
 
@@ -281,7 +278,9 @@ elif menu == "Analytics":
 
         st.plotly_chart(fig3,use_container_width=True)
 
+        # -------------------------------------------------
         # AI PREDICTION
+        # -------------------------------------------------
 
         monthly_data["month_num"] = np.arange(len(monthly_data))
 
@@ -301,3 +300,39 @@ elif menu == "Analytics":
         st.subheader("🤖 AI Prediction")
 
         st.success(f"Predicted Next Month Expense: ₹{predicted}")
+
+        # -------------------------------------------------
+        # AI SPENDING INSIGHTS
+        # -------------------------------------------------
+
+        st.divider()
+
+        st.subheader("🧠 AI Spending Insights")
+
+        total_spending = df["amount"].sum()
+
+        top_category = category_data.loc[
+            category_data["amount"].idxmax(),"category"
+        ]
+
+        top_amount = category_data["amount"].max()
+
+        percentage = (top_amount/total_spending)*100
+
+        avg_expense = df["amount"].mean()
+
+        st.info(f"You spent the most on **{top_category} (₹{top_amount})**.")
+
+        st.info(
+            f"**{top_category} accounts for {percentage:.2f}% of your spending.**"
+        )
+
+        st.info(
+            f"Your **average expense** is **₹{avg_expense:.2f}**."
+        )
+
+        if percentage > 50:
+
+            st.warning(
+                f"⚠ You are spending a large portion on {top_category}. Consider reducing it."
+            )

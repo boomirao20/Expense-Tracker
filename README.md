@@ -44,12 +44,15 @@ A modern, intelligent expense tracking application that transforms how you manag
 - 📅 **Date Range Filtering**: Focus on specific time periods with intuitive date pickers
 - 📋 **Interactive Tables**: Sortable, searchable expense history with full details
 - 💾 **Export Options**: Download your data in CSV or Excel formats with one click
+- 💼 **Monthly Budget Tracker**: Set budget limits and track spending with alerts
+- 🗑️ **Easy Deletion**: Remove expenses with simple ID-based deletion
 
 #### 📈 **Advanced Analytics**
-- 🥧 **Category Distribution**: Beautiful pie charts showing where your money goes
-- 📊 **Spending Comparison**: Interactive bar charts for category-wise analysis
+- 🥧 **Category Distribution**: Beautiful donut charts showing where your money goes
+- 📊 **Spending Comparison**: Interactive colored bar charts for category-wise analysis
 - 📈 **Trend Analysis**: Monthly expense patterns with smooth line charts
 - 🤖 **AI Predictions**: Machine learning forecasts for next month's expenses
+- 🧠 **AI Spending Insights**: Intelligent analysis of your spending patterns with recommendations
 
 #### ➕ **Effortless Management**
 - ⚡ **Quick Entry**: Add expenses in seconds with intuitive forms
@@ -180,12 +183,15 @@ CREATE TABLE expenses (
 2. 📅 Use date filters for specific periods
 3. 🎯 View KPI cards and expense table
 4. 💾 Download reports in CSV or Excel format
+5. 💼 Set and track your monthly budget
+6. 🗑️ Delete expenses using ID-based removal
 
 ### 📈 Analytics & Insights
 1. 🔍 Explore **"Analytics"** section
-2. 🥧 View category distribution charts
-3. 📊 Analyze monthly spending trends
+2. 🥧 View category distribution donut charts
+3. 📊 Analyze monthly spending trends with colored bar charts
 4. 🤖 Check AI predictions for next month
+5. 🧠 Get AI spending insights and recommendations
 
 ### 🗂️ Managing Data
 - 🗑️ Delete expenses using ID in Dashboard
@@ -227,14 +233,16 @@ CREATE TABLE expenses (
 
 <div align="center">
 
-🧠 **Intelligent Expense Forecasting**
+🧠 **Intelligent Expense Forecasting & Insights**
 
-The application uses Linear Regression to predict next month's expenses:
+The application uses Linear Regression to predict next month's expenses and provides intelligent spending insights:
 
 - 📊 **Training Data**: Monthly aggregated expense history
-- 🔮 **Prediction**: Forecast for upcoming month
-- 💡 **Purpose**: Budget planning and financial management
-- ⚡ **Technology**: scikit-learn Linear Regression model
+- 🔮 **Prediction**: Forecast for upcoming month using Linear Regression
+- 💡 **Spending Insights**: AI-powered analysis of your top spending category
+- ⚠️ **Smart Recommendations**: Alerts when you overspend on specific categories
+- 📈 **Pattern Recognition**: Identifies spending patterns and provides actionable insights
+- ⚡ **Technology**: scikit-learn Linear Regression model with intelligent analysis
 
 </div>
 
