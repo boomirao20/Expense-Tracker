@@ -313,34 +313,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
-
-<div align="center">
-
-🌟 **Special Thanks To**
-
-- [Streamlit](https://streamlit.io/) - Amazing web framework
-- [Plotly](https://plotly.com/) - Beautiful visualizations
-- [scikit-learn](https://scikit-learn.org/) - Machine learning capabilities
-
-</div>
-
----
-
-## 📞 Support
-
-<div align="center">
-
-🆘 **Need Help?**
-
-- 🐛 Open an issue on GitHub
-- 📖 Check the troubleshooting section
-- 💬 Review code comments for context
-
-</div>
-
----
-
 <div align="center">
 
 ## 🎉 Made with ❤️ using Streamlit
